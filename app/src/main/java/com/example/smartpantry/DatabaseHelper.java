@@ -30,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void seedRecipes(SQLiteDatabase db) {
-        for (Recipe recipe : RecipeRepository.definitions()) {
+        for (Recipe recipe : RecipeRepository.all()) {
             ContentValues recipeValues = new ContentValues();
             recipeValues.put("name", recipe.name); recipeValues.put("steps", recipe.steps);
             long recipeId = db.insertWithOnConflict("recipes", null, recipeValues, SQLiteDatabase.CONFLICT_IGNORE);

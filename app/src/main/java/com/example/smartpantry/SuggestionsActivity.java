@@ -16,7 +16,9 @@ public class SuggestionsActivity extends AppCompatActivity {
         root.addView(Ui.text(this,"Only recipes with every required ingredient and enough quantity are shown.",14));
         List<Recipe> matches=new ArrayList<>();List<Ingredient> pantry=db.getIngredients();
         for(Recipe r:RecipeRepository.all(db))if(RecipeRepository.canMake(r,pantry))matches.add(r);
-        if(matches.isEmpty()){root.addView(Ui.text(this,"No recipes match your pantry yet — add more ingredients and try again.",16));}
+        if(matches.isEmpty()){root.addView(Ui.text(this,"No recipes match your pantry yet — add more ingredients and try again.",16));
+            android.widget.Toast.makeText(this, "No matching recipes found. Try adding more ingredients!", android.widget.Toast.LENGTH_LONG).show();
+        ;}
         else {
             root.addView(Ui.text(this,matches.size()+" recipes you can make now",14));
             ScrollView scroll=new ScrollView(this);LinearLayout list=new LinearLayout(this);list.setOrientation(LinearLayout.VERTICAL);
