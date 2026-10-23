@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayout nav = new LinearLayout(this);
 
-        Button add = Ui.button(this, "+ Add ingredient");
+        Button add = Ui.button(this, "+ Add New Ingredient");
         Button suggestions = Ui.button(this, "Suggested recipes");
         Button settings = Ui.button(this, "Settings");
 
