@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         emptyMessage = new TextView(this);
         emptyMessage.setText(
-                "Your pantry is empty.\nAdd your first ingredient!"
+                "Your pantry is looking a little empty!\n\nTap '+ Add ingredient' to get started."
         );
         emptyMessage.setTextSize(16);
         emptyMessage.setGravity(Gravity.CENTER);
