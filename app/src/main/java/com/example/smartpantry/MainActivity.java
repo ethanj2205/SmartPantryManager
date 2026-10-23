@@ -131,7 +131,8 @@ public class MainActivity extends AppCompatActivity {
                 new AlertDialog.Builder(MainActivity.this)
                         .setTitle("Delete ingredient?")
                         .setMessage(
-                                "Remove " + i.name + " from your pantry?"
+                                "Are you sure you want to permanently remove "
+                                                       + i.name + "from your pantry?"
                         )
                         .setNegativeButton("Cancel", null)
                         .setPositiveButton("Delete", (dialog, which) -> {
