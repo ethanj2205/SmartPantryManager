@@ -3,7 +3,7 @@ package com.example.smartpantry;
 import java.util.*;
 
 public class RecipeRepository {
-    public static List<Recipe> definitions() {
+    public static List<Recipe> all() {
         List<Recipe> r=new ArrayList<>();
         r.add(new Recipe("Tomato Omelette","1. Beat the eggs. 2. Chop the tomato. 3. Cook together in a lightly oiled pan.","egg","2","tomato","1"));
         r.add(new Recipe("Cheese Toast","1. Place cheese on bread. 2. Toast until melted.","bread","2","cheese","30"));
