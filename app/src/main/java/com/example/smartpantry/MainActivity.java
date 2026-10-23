@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout nav = new LinearLayout(this);
 
         Button add = Ui.button(this, "+ Add New Ingredient");
-        Button suggestions = Ui.button(this, "Suggested recipes");
+        Button suggestions = Ui.button(this, "Find Recipes");
         Button settings = Ui.button(this, "Settings");
 
         nav.addView(add, new LinearLayout.LayoutParams(0, -2, 1));
