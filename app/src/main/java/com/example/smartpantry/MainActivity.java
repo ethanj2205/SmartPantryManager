@@ -137,8 +137,12 @@ public class MainActivity extends AppCompatActivity {
                         .setPositiveButton("Delete", (dialog, which) -> {
                             db.deleteIngredient(i.id);
                             refresh();
-                        })
-                        .show();
+                        });
+                android.widget.Toast.makeText(
+                        MainActivity.this,
+                        "Ingredient deleted successfully",
+                        android.widget.Toast.LENGTH_SHORT
+                ).show();
             }
         };
     }
