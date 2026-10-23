@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         root.addView(nav);
         root.addView(settings);
 
-        root.addView(Ui.text(this, "YOUR PANTRY", 13));
+        root.addView(Ui.text(this, "YOUR PANTRY INGREDIENTS", 13));
 
         emptyMessage = new TextView(this);
         emptyMessage.setText(
