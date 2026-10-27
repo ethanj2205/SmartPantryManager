@@ -9,25 +9,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SettingsActivity extends AppCompatActivity {
-    DatabaseHelper db;
-    @Override protected void onCreate(Bundle b){super.onCreate(b);db=new DatabaseHelper(this);render();}
-    @Override protected void onResume(){super.onResume();if(db!=null)render();}
-    private void render(){
-        LinearLayout root=Ui.page(this,"Suggested Recipes");
-        root.addView(Ui.text(this,"Only recipes with every required ingredient and enough quantity are shown.",14));
-        List<Recipe> matches=new ArrayList<>();List<Ingredient> pantry=db.getIngredients();
-        for(Recipe r:RecipeRepository.all(db))if(RecipeRepository.canMake(r,pantry))matches.add(r);
-        if(matches.isEmpty()){root.addView(Ui.text(this,"No recipes match your pantry yet — add more ingredients and try again.",16));}
-        else {
-            root.addView(Ui.text(this,matches.size()+" recipes you can make now",14));
-            ScrollView scroll=new ScrollView(this);LinearLayout list=new LinearLayout(this);list.setOrientation(LinearLayout.VERTICAL);
-            for(Recipe r:matches){LinearLayout card=new LinearLayout(this);card.setOrientation(LinearLayout.VERTICAL);card.setPadding(14,10,14,10);card.setBackground(Ui.shape(0xFFFFFFFF,18));
-                TextView name=Ui.text(this,r.name,18);name.setTypeface(null,android.graphics.Typeface.BOLD);card.addView(name);
-                Button open=Ui.button(this,"View recipe");card.addView(open);open.setOnClickListener(v->{Intent i=new Intent(this,RecipeDetailActivity.class);i.putExtra("recipe",r.name);startActivity(i);});
-                LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,-2);lp.setMargins(0,6,0,6);list.addView(card,lp);
-            }
-            scroll.addView(list);root.addView(scroll,new LinearLayout.LayoutParams(-1,0,1));
-        }
-        Button back=Ui.button(this,"Back to pantry");root.addView(back);back.setOnClickListener(v->finish());setContentView(root);
+    private static final String PREFS = "smart_pantry_settings";
+    private static final String KEY_EXPIRY_ALERTS = "expiry_alerts_enabled";
+
+    @Override protected void onCreate(Bundle b) {
+        super.onCreate(b);
+        render();
+    }
+
+    private void render() {
+        SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
+        LinearLayout root = Ui.page(this, "Preferences");
+        root.addView(Ui.text(this, "Personalise how Smart Pantry Manager helps you use ingredients before they expire.", 14));
+        LinearLayout card = Ui.card(this);
+        TextView title = Ui.text(this, "Expiry reminders", 18);
+        title.setTypeface(null, android.graphics.Typeface.BOLD);
+        card.addView(title);
+        card.addView(Ui.text(this, "Enable reminders in the app for ingredients with an expiry date. This preference is saved on this device.", 14));
+        Switch toggle = new Switch(this);
+        toggle.setText("Show expiry reminders");
+        toggle.setTextColor(Ui.TEXT);
+        toggle.setTextSize(15);
+        toggle.setChecked(prefs.getBoolean(KEY_EXPIRY_ALERTS, true));
+        card.addView(toggle);
+        toggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            prefs.edit().putBoolean(KEY_EXPIRY_ALERTS, isChecked).apply();
+            Toast.makeText(getApplicationContext(), "Settings saved", Toast.LENGTH_SHORT).show();
+        });
+        root.addView(card, Ui.spaced(this, 12, 0));
+        LinearLayout about = Ui.card(this);
+        about.addView(Ui.section(this, "About your pantry"));
+        about.addView(Ui.text(this, "Smart Pantry Manager suggests recipes only when every required ingredient is available in sufficient quantity.", 14));
+        root.addView(about, Ui.spaced(this, 12, 0));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -2);
+        params.topMargin = Ui.dp(this, 12);
+        Button back = Ui.secondaryButton(this, "Back to pantry");
+        root.addView(back, params);
+        back.setOnClickListener(v -> finish());
+        setContentView(root);
     }
 }

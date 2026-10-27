@@ -10,10 +10,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION=2;
     public DatabaseHelper(Context context) { super(context, DB_NAME, null, DB_VERSION); }
 
+    @Override public void onConfigure(SQLiteDatabase db) {
+        super.onConfigure(db);
+        db.setForeignKeyConstraintsEnabled(true);
+    }
+
     @Override public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE ingredients (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, quantity REAL NOT NULL, unit TEXT NOT NULL, expiry TEXT)");
         createRecipeTables(db);
-        seed(db);
+        // Start with an empty personal pantry; only the recipe catalogue is preloaded.
         seedRecipes(db);
     }
 
@@ -40,6 +45,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 }
             }
             if (recipeId < 0) continue;
+            try (Cursor existing = db.rawQuery("SELECT COUNT(*) FROM recipe_ingredients WHERE recipe_id=?", new String[]{String.valueOf(recipeId)})) {
+                if (existing.moveToFirst() && existing.getInt(0) > 0) continue;
+            }
             for (Map.Entry<String, Double> item : recipe.ingredients.entrySet()) {
                 ContentValues ingredientValues = new ContentValues();
                 ingredientValues.put("recipe_id", recipeId);
